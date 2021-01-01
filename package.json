@@ -4,8 +4,7 @@
   "description": "MERN stack example app ",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
-    "server": "nodemon server"
+    "start": "nodemon server"
   },
   "repository": {
     "type": "git",
@@ -27,7 +26,8 @@
     "express-validator": "^6.4.0",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.5",
+    "mongoose": "^5.11.9",
+    "morgan": "^1.10.0",
     "normalize-url": "^5.0.0"
   },
   "devDependencies": {
