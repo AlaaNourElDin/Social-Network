@@ -5,6 +5,7 @@ const Profile = require('../models/profileModel');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const BaseError = require('../exceptions/BasrError');
+const Post = require('../models/postModel');
 
 exports.getUserProfileInfo = catchAsync(async (req, res, next) => {
   const profile = await Profile.findOne({ user: req.user.id }).populate(
@@ -97,7 +98,7 @@ exports.getProfileByUserId = catchAsync(
 
 exports.deleteProfileByUserId = catchAsync(async (req, res, next) => {
   // Remove user posts
-  //await Post.deleteMany({ user: req.user.id });
+  await Post.deleteMany({ user: req.user.id });
   // Remove profile
   await Profile.findOneAndRemove({ user: req.user.id });
   // Remove user
