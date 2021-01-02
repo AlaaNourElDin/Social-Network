@@ -47,4 +47,54 @@ profileRouter.delete(
   profileController.deleteProfileByUserId
 );
 
+// @route    PUT api/profile/experience
+// @desc     Add profile experience
+// @access   Private
+profileRouter.put(
+  '/experience',
+
+  authenticateUser,
+  profileController.validateExperinceModel,
+  profileController.addProfileExperience
+);
+
+// @route    DELETE api/profile/experience/:exp_id
+// @desc     Delete experience from profile
+// @access   Private
+
+profileRouter.delete(
+  '/experience/:exp_id',
+  authenticateUser,
+  profileController.deleteProfileExperience
+);
+
+// @route    PUT api/profile/education
+// @desc     Add profile education
+// @access   Private
+profileRouter.put(
+  '/education',
+
+  authenticateUser,
+  profileController.validateEducationModel,
+  profileController.addProfileEducation
+);
+
+// @route    DELETE api/profile/education/:edu_id
+// @desc     Delete education from profile
+// @access   Private
+
+profileRouter.delete(
+  '/education/:edu_id',
+  authenticateUser,
+  profileController.deleteProfileEducation
+);
+
+// @route    GET api/profile/github/:username
+// @desc     Get user repos from Github
+// @access   Public
+profileRouter.get(
+  '/github/:username',
+  profileController.getUserReposFromGithub
+);
+
 module.exports = profileRouter;
