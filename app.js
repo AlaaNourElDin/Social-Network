@@ -4,6 +4,7 @@ const userRouter = require('./routes/userRouter');
 const BaseError = require('./exceptions/BasrError');
 const globalErrorHandler = require('./exceptions/errorHandler');
 const authRouter = require('./routes/authRouter');
+const profileRouter = require('./routes/profileRouter');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.static(`${__dirname}/public`));
 // Routers
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/profile', profileRouter);
 
 app.all('*', (req, res, next) => {
   next(new BaseError(`Can't find ${req.originalUrl} on this server!`, 404));

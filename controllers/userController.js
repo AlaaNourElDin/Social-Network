@@ -1,16 +1,18 @@
-const User = require('../models/userModel');
-const catchAsync = require('./../utils/catchAsync');
 const { check, validationResult } = require('express-validator');
-const BaseError = require('../exceptions/BasrError');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const BaseError = require('../exceptions/BasrError');
+const catchAsync = require('./../utils/catchAsync');
+const User = require('../models/userModel');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
-  users
-    ? res.status(204).json({ errors: [{ msg: 'no users found' }] })
-    : res.status(200).json({ users });
+  if (users.length === 0) {
+    res.status(204).json({ errors: [{ msg: 'no users found' }] });
+  }
+
+  res.status(200).json({ users });
 });
 
 exports.validateUserModel = [
@@ -20,8 +22,8 @@ exports.validateUserModel = [
     'password',
     'Please enter a password with 6 or more characters'
   ).isLength({
-    min: 6,
-  }),
+    min: 6
+  })
 ];
 
 exports.createUser = catchAsync(async (req, res, next) => {
@@ -34,10 +36,10 @@ exports.createUser = catchAsync(async (req, res, next) => {
   const avatar = gravatar.url(email, {
     s: '200',
     r: 'pg',
-    d: 'mm',
+    d: 'mm'
   });
 
-  let user = { name, email, avatar, password };
+  const user = { name, email, avatar, password };
 
   const salt = await bcrypt.genSalt(10);
 
@@ -49,7 +51,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
     { user: { id: newUser.id } },
     process.env.JWTSECRET,
     {
-      expiresIn: 360000,
+      expiresIn: 360000
     },
     (err, token) => {
       if (err) throw new BaseError(`error while signing jwt ${err}`);

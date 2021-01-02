@@ -1,9 +1,9 @@
-const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
-const BaseError = require('../exceptions/BasrError');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/userModel');
+const catchAsync = require('../utils/catchAsync');
+const BaseError = require('../exceptions/BasrError');
 
 exports.getUserInfo = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('-password');
@@ -26,8 +26,8 @@ exports.login = catchAsync(async (req, res, next) => {
     throw new BaseError('invalid inputs', 400, errors.array());
   }
   const { email, password } = req.body;
-  let user = await User.findOne({ email });
-  if (Object.keys(user).length === 0) {
+  const user = await User.findOne({ email });
+  if (!user) {
     throw new BaseError('email or password is not correct', 401);
   }
   const match = await bcrypt.compare(password, user.password);
