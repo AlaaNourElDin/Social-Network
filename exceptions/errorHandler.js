@@ -1,18 +1,20 @@
 const BaseError = require('./../exceptions/BasrError');
 
-const handleCastErrorDB = (err) => {
+const handleCastErrorDB = err => {
   const message = `Invalid ${err.path}: ${err.value}.`;
   return new BaseError(message, 400);
 };
 
-const handleDuplicateFieldsDB = (err) => {
+const handleDuplicateFieldsDB = err => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  console.log(err.errmsg);
+  console.log(value);
 
   const message = `Duplicate field value: ${value}. Please use another value!`;
-  return new BaseError(message, 409);
+  return new BaseError(message, 400);
 };
-const handleValidationErrorDB = (err) => {
-  const errors = Object.values(err.errors).map((el) => el.message);
+const handleValidationErrorDB = err => {
+  const errors = Object.values(err.errors).map(el => el.message);
 
   const message = `Invalid input data. ${errors.join('. ')}`;
   return new BaseError(message, 400);
@@ -22,8 +24,8 @@ const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
     error: err,
-    message: err.message,
-    stack: err.stack,
+    msg: err.message,
+    stack: err.stack
   });
 };
 
@@ -31,8 +33,8 @@ const sendErrorProd = (err, res) => {
   // Operational, trusted error: send message to client
   if (err.isOperational) {
     res.status(err.statusCode).json({
-      message: err.message,
-      errors: err.errors,
+      msg: err.message,
+      errors: err.errors
     });
 
     // Programming or other unknown error: don't leak error details
@@ -43,7 +45,7 @@ const sendErrorProd = (err, res) => {
     // 2) Send generic message
     res.status(500).json({
       status: 'error',
-      message: 'Something went very wrong!',
+      message: 'Something went very wrong!'
     });
   }
 };

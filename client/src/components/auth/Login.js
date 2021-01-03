@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { doLogin } from '../../actions/auth';
+import PropTypes from 'prop-types';
 
-export const Login = () => {
+const Login = ({ doLogin, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -14,7 +17,10 @@ export const Login = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
+    doLogin({ email, password });
   };
+
+  if (isAuthenticated) return <Redirect to='/dashboard' />;
 
   return (
     <section className='container'>
@@ -31,7 +37,6 @@ export const Login = () => {
             type='email'
             placeholder='Email Address'
             name='email'
-            required
             value={email}
             onChange={onChange}
           />
@@ -53,3 +58,14 @@ export const Login = () => {
     </section>
   );
 };
+
+Login.propTypes = {
+  doLogin: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { doLogin })(Login);

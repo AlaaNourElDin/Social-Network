@@ -39,7 +39,7 @@ exports.getPostById = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return res.status(404).json({ message: 'Post not found' });
+    return res.status(404).json({ msg: 'Post not found' });
   }
 
   res.json(post);
@@ -49,17 +49,17 @@ exports.deletePostById = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return res.status(404).json({ message: 'Post not found' });
+    return res.status(404).json({ msg: 'Post not found' });
   }
 
   // Check user
   if (post.user.toString() !== req.user.id) {
-    return res.status(401).json({ message: 'User not authorized' });
+    return res.status(401).json({ msg: 'User not authorized' });
   }
 
   await post.remove();
 
-  res.json({ message: 'Post removed' });
+  res.json({ msg: 'Post removed' });
 });
 
 exports.likePost = catchAsync(async (req, res, next) => {
@@ -67,7 +67,7 @@ exports.likePost = catchAsync(async (req, res, next) => {
 
   // Check if the post has already been liked
   if (post.likes.some(like => like.user.toString() === req.user.id)) {
-    return res.status(400).json({ message: 'Post already liked' });
+    return res.status(400).json({ msg: 'Post already liked' });
   }
 
   post.likes.unshift({ user: req.user.id });
@@ -82,7 +82,7 @@ exports.unlikePost = catchAsync(async (req, res, next) => {
 
   // Check if the post has not yet been liked
   if (!post.likes.some(like => like.user.toString() === req.user.id)) {
-    return res.status(400).json({ message: 'Post has not yet been liked' });
+    return res.status(400).json({ msg: 'Post has not yet been liked' });
   }
 
   // remove the like
@@ -129,11 +129,11 @@ exports.deleteCommentFromPost = catchAsync(async (req, res, next) => {
   const comment = post.comments.find(c => c.id === req.params.comment_id);
   // Make sure comment exists
   if (!comment) {
-    return res.status(404).json({ message: 'Comment does not exist' });
+    return res.status(404).json({ msg: 'Comment does not exist' });
   }
   // Check user
   if (comment.user.toString() !== req.user.id) {
-    return res.status(401).json({ message: 'User not authorized' });
+    return res.status(401).json({ msg: 'User not authorized' });
   }
 
   post.comments = post.comments.filter(

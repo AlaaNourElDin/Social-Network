@@ -90,7 +90,7 @@ exports.getProfileByUserId = catchAsync(
       user: userId
     }).populate('user', ['name', 'avatar']);
 
-    if (!profile) return res.status(404).json({ message: 'Profile not found' });
+    if (!profile) return res.status(404).json({ msg: 'Profile not found' });
 
     return res.json(profile);
   }
@@ -104,7 +104,7 @@ exports.deleteProfileByUserId = catchAsync(async (req, res, next) => {
   // Remove user
   await User.findOneAndRemove({ _id: req.user.id });
 
-  res.json({ message: 'User deleted' });
+  res.json({ msg: 'User deleted' });
 });
 
 exports.validateExperinceModel = [
@@ -231,7 +231,6 @@ exports.getUserReposFromGithub = catchAsync(async (req, res, next) => {
     const gitHubResponse = await axios.get(uri, { headers });
     return res.json(gitHubResponse.data);
   } catch (err) {
-    console.error(err.message);
     return res.status(404).json({ msg: 'No Github profile found' });
   }
 });
