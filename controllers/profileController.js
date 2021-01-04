@@ -1,8 +1,8 @@
 const normalize = require('normalize-url');
 const { check, validationResult } = require('express-validator');
 const axios = require('axios');
-const Profile = require('../models/profileModel');
 const User = require('../models/userModel');
+const Profile = require('../models/profileModel');
 const catchAsync = require('../utils/catchAsync');
 const BaseError = require('../exceptions/BasrError');
 const Post = require('../models/postModel');
